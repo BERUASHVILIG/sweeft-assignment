@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "./redux/hooks";
 import { getAllCountries } from "./utils/ajax";
 import { saveAllCountry } from "./redux/actions";
+import Airports from "./components/Airports";
 // import "./App.css";
 
 const App = () => {
@@ -72,6 +73,7 @@ const App = () => {
                         <img src={country.flags.png} alt="" />
                         <div>Name: {country.name.common}</div>
                         <div>Area: {country.area}</div>
+                        <Airports name={country.name.common} />
                         {/* Add more information here */}
                       </div>
                     );

@@ -1,7 +1,13 @@
+import { type } from "os";
+
 type GlobalState = {
   countries: CountryType[];
-  country: CountryType | null;
   airports: AirportsType[];
+  currencies: CurrencyExchangeRates | null;
+};
+
+type CurrencyExchangeRates = {
+  [key: string]: number;
 };
 
 type CountryType = {
@@ -90,3 +96,7 @@ type AirportsType = {
   region: string;
   timezone: string;
 };
+
+// type CurrencyOptions = {
+//   rates: string[];
+// };

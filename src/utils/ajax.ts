@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 
 export const loadAllCountries = axios.create({
@@ -28,5 +27,3 @@ export const getAllAirports = (code: string) =>
   loadAllAirports.get(`?country=${code}`);
 
 export const getAllCountries = () => loadAllCountries.get("");
-
-export const getSingleCountry = () => loadAllCountries.get(`/all`);

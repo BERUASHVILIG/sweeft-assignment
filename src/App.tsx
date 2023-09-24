@@ -51,7 +51,7 @@ const App = () => {
             <select onChange={handleSelectChange}>
               <option value="">Select a country</option>
               {countries.length > 0 ? (
-                countries.map((country, index) => (
+                countries.map((country: any, index: number) => (
                   <option key={index} value={country.name.common}>
                     {country.name.common}
                   </option>
@@ -64,7 +64,7 @@ const App = () => {
             {selectedCountry && (
               <div>
                 <h2>Country Information</h2>
-                {countries.map((country, index) => {
+                {countries.map((country: any, index: number) => {
                   if (country.name.common === selectedCountry) {
                     return (
                       <div key={index}>
@@ -86,24 +86,13 @@ const App = () => {
                         {selectedCountry && (
                           <div>
                             <h2>Currency Information</h2>
-                            {countries.map((country, index) => {
-                              if (country.name.common === selectedCountry) {
-                                return (
-                                  <div key={index}>
-                                    {/* ...other country information */}
-                                    <CurrencyRow
-                                      currencyCode={
-                                        country.currencies[0] || "USD"
-                                      }
-                                    />
-                                  </div>
-                                );
-                              }
-                              return null;
-                            })}
+                            <div>
+                              {Object.keys(country.currencies).map((code) => (
+                                <CurrencyRow key={code} currencyCode={code} />
+                              ))}
+                            </div>
                           </div>
                         )}
-                        {/* <CurrencyRow currencyCode={"USD"} /> */}
                       </div>
                     );
                   }

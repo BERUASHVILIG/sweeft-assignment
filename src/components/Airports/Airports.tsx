@@ -1,13 +1,8 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { useEffect } from "react";
 import { getAllAirports } from "../../utils/ajax";
 import { useAppSelector, useAppDispatch } from "../../redux/hooks";
 import { saveAllAirports } from "../../redux/actions";
+import { AirportsType } from "../../@types/general";
 
 const Airports = ({ code }: any) => {
   const dispatch = useAppDispatch();

@@ -4,10 +4,13 @@
 import {
   SAVE_ALL_COUNTRY_ACTION,
   SAVE_SINGLE_COUNTRY_ACTION,
+  SAVE_ALL_AIRPORTS_ACTION,
 } from "../redux/actionTypes";
 
 export const SAVE_ALL_COUNTRY = "SAVE_ALL_COUNTRY";
 export const SAVE_SINGLE_COUNTRY = "SAVE_SINGLE_COUNTRY";
+
+export const SAVE_ALL_AIRPORTS = "SAVE_ALL_AIRPORTS";
 
 export const saveAllCountry = (
   countries: CountryType[]
@@ -21,6 +24,13 @@ export const saveSingleCountry = (
 ): SAVE_SINGLE_COUNTRY_ACTION => ({
   type: SAVE_SINGLE_COUNTRY,
   country,
+});
+
+export const saveAllAirports = (
+  airports: AirportsType[]
+): SAVE_ALL_AIRPORTS_ACTION => ({
+  type: SAVE_ALL_AIRPORTS,
+  airports,
 });
 
 // export const loadAllCountries = () => {

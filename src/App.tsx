@@ -1,8 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "./redux/hooks";
 import { getAllCountries } from "./utils/ajax";
 import { saveAllCountry } from "./redux/actions";
 import Airports from "./components/Airports";
+import CurrencyRow from "./components/CurrencyRow";
 // import "./App.css";
 
 const App = () => {
@@ -61,7 +64,6 @@ const App = () => {
             {selectedCountry && (
               <div>
                 <h2>Country Information</h2>
-                {/* Display additional information for the selected country */}
                 {countries.map((country, index) => {
                   if (country.name.common === selectedCountry) {
                     return (
@@ -73,12 +75,39 @@ const App = () => {
                         <img src={country.flags.png} alt="" />
                         <div>Name: {country.name.common}</div>
                         <div>Area: {country.area}</div>
-                        <Airports name={country.name.common} />
-                        {/* Add more information here */}
+                        <div>code={country.cca2}</div>
+                        <div>
+                          Currency code:
+                          {Object.keys(country.currencies).map((code) => (
+                            <li key={code}>{code}</li>
+                          ))}
+                        </div>
+                        <Airports code={country.cca2} />
+                        {selectedCountry && (
+                          <div>
+                            <h2>Currency Information</h2>
+                            {countries.map((country, index) => {
+                              if (country.name.common === selectedCountry) {
+                                return (
+                                  <div key={index}>
+                                    {/* ...other country information */}
+                                    <CurrencyRow
+                                      currencyCode={
+                                        country.currencies[0] || "USD"
+                                      }
+                                    />
+                                  </div>
+                                );
+                              }
+                              return null;
+                            })}
+                          </div>
+                        )}
+                        {/* <CurrencyRow currencyCode={"USD"} /> */}
                       </div>
                     );
                   }
-                  return null; // Render nothing if the country doesn't match
+                  return null;
                 })}
               </div>
             )}

@@ -1,6 +1,7 @@
 type GlobalState = {
   countries: CountryType[];
   country: CountryType | null;
+  airports: AirportsType[];
 };
 
 type CountryType = {
@@ -14,6 +15,7 @@ type CountryType = {
       };
     };
   };
+  borders: string[];
   tld: string[];
   cca2: string;
   ccn3: string;
@@ -74,4 +76,17 @@ type CountryType = {
   capitalInfo: {
     latlng: number[];
   };
+};
+
+type AirportsType = {
+  city: string;
+  country: string;
+  elevation_ft: string;
+  iata: string;
+  icao: string;
+  latitude: string;
+  longitude: string;
+  name: string;
+  region: string;
+  timezone: string;
 };

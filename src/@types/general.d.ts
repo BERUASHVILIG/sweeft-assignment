@@ -4,10 +4,24 @@ type GlobalState = {
   countries: CountryType[];
   airports: AirportsType[];
   currencies: CurrencyExchangeRates | null;
+  currentLocation: any;
 };
 
 type CurrencyExchangeRates = {
   [key: string]: number;
+};
+
+type AirportsType = {
+  city: string;
+  country: string;
+  elevation_ft: string;
+  iata: string;
+  icao: string;
+  latitude: string;
+  longitude: string;
+  name: string;
+  region: string;
+  timezone: string;
 };
 
 type CountryType = {
@@ -83,20 +97,3 @@ type CountryType = {
     latlng: number[];
   };
 };
-
-type AirportsType = {
-  city: string;
-  country: string;
-  elevation_ft: string;
-  iata: string;
-  icao: string;
-  latitude: string;
-  longitude: string;
-  name: string;
-  region: string;
-  timezone: string;
-};
-
-// type CurrencyOptions = {
-//   rates: string[];
-// };

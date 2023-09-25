@@ -1,18 +1,23 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "./redux/hooks";
 import { getAllCountries } from "./utils/ajax";
 import { saveAllCountry } from "./redux/actions";
 import Airports from "./components/Airports";
 import CurrencyRow from "./components/CurrencyRow";
-// import "./App.css";
+import Navigation from "./components/Navigation";
+import NavigationModal from "./components/NavigationModal";
+
+// style
+import "./App.css";
+import { Box, Typography } from "@mui/material";
 
 const App = () => {
   const countries = useAppSelector((state) => state.countries);
+  const currentLocation = useAppSelector((state) => state.currentLocation);
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedCountry, setSelectedCountry] = useState(""); // State to store the selected country
+  const [selectedCountry, setSelectedCountry] = useState<any>();
+  const [hasAgreed, setHasAgreed] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchCountries = async () => {
@@ -20,90 +25,152 @@ const App = () => {
         const { data } = await getAllCountries();
         dispatch(saveAllCountry(data));
         setIsLoading(false);
+        setSelectedCountry(hasAgreed ? currentLocation : selectedCountry);
       } catch (error) {
-        console.log("err", error);
         setIsLoading(false);
       }
     };
     fetchCountries();
-  }, [dispatch]);
+  }, [dispatch, currentLocation]);
 
-  // Function to handle select change
   const handleSelectChange = (event: any) => {
     setSelectedCountry(event.target.value);
   };
 
+  const handleAgreement = () => {
+    setHasAgreed(true);
+  };
+
+  const handleDisagreement = () => {
+    setHasAgreed(false);
+  };
+
   return (
-    <div>
-      <div>
+    <Box>
+      <Box>
         {isLoading ? (
-          <div
+          <Box
             style={{
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
             }}
           >
-            <div className="lds-dual-ring"></div>
-          </div>
+            <Box className="lds-dual-ring"></Box>
+          </Box>
         ) : (
-          <div>
-            <select onChange={handleSelectChange}>
-              <option value="">Select a country</option>
-              {countries.length > 0 ? (
-                countries.map((country: any, index: number) => (
-                  <option key={index} value={country.name.common}>
-                    {country.name.common}
-                  </option>
-                ))
-              ) : (
-                <option value="">No countries available.</option>
-              )}
-            </select>
+          <Box>
+            {hasAgreed ? (
+              <select
+                style={{ marginTop: "50px" }}
+                onChange={handleSelectChange}
+                value={selectedCountry}
+              >
+                <option value="">Select a country</option>
+                {countries.length > 0 ? (
+                  countries.map((country: any, index: number) => (
+                    <option key={index} value={country.name.common}>
+                      {country.name.common}
+                    </option>
+                  ))
+                ) : (
+                  <option value="">No countries available.</option>
+                )}
+              </select>
+            ) : (
+              <NavigationModal
+                onAgree={handleAgreement}
+                onDisagree={handleDisagreement}
+              />
+            )}
+            {!hasAgreed && (
+              <select
+                style={{ marginTop: "50px" }}
+                onChange={handleSelectChange}
+                value={selectedCountry}
+              >
+                <option value="">Select a country</option>
+                {countries.length > 0 ? (
+                  countries.map((country: any, index: number) => (
+                    <option key={index} value={country.name.common}>
+                      {country.name.common}
+                    </option>
+                  ))
+                ) : (
+                  <option value="">No countries available.</option>
+                )}
+              </select>
+            )}
 
             {selectedCountry && (
-              <div>
-                <h2>Country Information</h2>
-                {countries.map((country: any, index: number) => {
-                  if (country.name.common === selectedCountry) {
-                    return (
-                      <div key={index}>
-                        <div>Capital:{country.capital}</div>
-                        <div>Region:{country.region}</div>
-                        <div>Population:{country.population}</div>
-                        <div>{country.currencies[0]?.name[0]}</div>
-                        <img src={country.flags.png} alt="" />
-                        <div>Name: {country.name.common}</div>
-                        <div>Area: {country.area}</div>
-                        <div>code={country.cca2}</div>
-                        <div>
-                          Currency code:
-                          {Object.keys(country.currencies).map((code) => (
-                            <li key={code}>{code}</li>
-                          ))}
-                        </div>
-                        <Airports code={country.cca2} />
-                        {selectedCountry && (
-                          <div>
-                            <h2>Currency Information</h2>
-                            <div>
-                              {Object.keys(country.currencies).map((code) => (
-                                <CurrencyRow key={code} currencyCode={code} />
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    );
-                  }
-                  return null;
-                })}
-              </div>
+              <Box>
+                <Typography variant="h6" color="#fff">
+                  Country Information
+                </Typography>
+                {isLoading ? (
+                  <Box
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Box className="lds-dual-ring"></Box>
+                  </Box>
+                ) : (
+                  countries.map((country: any, index: number) => {
+                    if (country.name.common === selectedCountry) {
+                      return (
+                        <Box key={index}>
+                          <img src={country.flags.png} alt="" />
+                          <Typography variant="h6" color="#fff">
+                            Current User Location
+                          </Typography>
+                          <Navigation />
+                          <Typography>Capital:{country.capital}</Typography>
+                          <Typography>Region:{country.region}</Typography>
+                          <Typography>
+                            Population:{country.population}
+                          </Typography>
+                          <Typography>Name: {country.name.common}</Typography>
+                          <Typography>Area: {country.area}</Typography>
+                          <Typography>code:{country.cca2}</Typography>
+                          <Box>
+                            Currency code:
+                            {Object?.keys(country?.currencies)?.map((code) => (
+                              <li key={code}>{code}</li>
+                            ))}
+                          </Box>
+
+                          <Box sx={{ display: "flex", gap: "15px" }}>
+                            <Airports code={country.cca2} />
+                            {selectedCountry && (
+                              <Box>
+                                <Box>
+                                  {Object?.keys(country?.currencies)?.map(
+                                    (code) => (
+                                      <CurrencyRow
+                                        key={code}
+                                        currencyCode={code}
+                                      />
+                                    )
+                                  )}
+                                </Box>
+                              </Box>
+                            )}
+                          </Box>
+                        </Box>
+                      );
+                    }
+                    return null;
+                  })
+                )}
+              </Box>
             )}
-          </div>
+          </Box>
         )}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 

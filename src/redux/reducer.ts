@@ -4,12 +4,14 @@ import {
   SAVE_ALL_COUNTRY,
   SAVE_ALL_AIRPORTS,
   SAVE_ALL_CURRENCY,
+  SAVE_CURRENT_LOCATION,
 } from "./actions";
 
 const defaultState: GlobalState = {
   countries: [],
   airports: [],
   currencies: null,
+  currentLocation: null,
 };
 
 const reducer = (state = defaultState, action: ACTIONS) => {
@@ -20,6 +22,8 @@ const reducer = (state = defaultState, action: ACTIONS) => {
       return { ...state, airports: action.airports };
     case SAVE_ALL_CURRENCY:
       return { ...state, currencies: action.currencies };
+    case SAVE_CURRENT_LOCATION:
+      return { ...state, currentLocation: action.currentLocation };
     default:
       return state;
   }

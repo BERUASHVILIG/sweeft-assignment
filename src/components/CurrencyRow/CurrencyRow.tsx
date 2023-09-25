@@ -3,10 +3,13 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { getAllCurrencyLatest } from "../../utils/ajax";
 import { saveAllCurrency } from "../../redux/actions";
 
+// style
+import { Box, TextField, Typography } from "@mui/material";
+
 const CurrencyRow = ({ currencyCode }: any) => {
-  const dispatch = useAppDispatch();
   const currencies = useAppSelector((state) => state.currencies);
-  console.log(currencies);
+  const dispatch = useAppDispatch();
+
   const [inputAmount, setInputAmount] = useState(1);
   const [selectedCurrency, setSelectedCurrency] = useState<string | null>(null);
   const [convertedAmount, setConvertedAmount] = useState<number | null>(null);
@@ -22,10 +25,6 @@ const CurrencyRow = ({ currencyCode }: any) => {
       console.error("Error fetching currency options:", error);
     }
   };
-
-  useEffect(() => {
-    fetchCurrencyOptions();
-  }, [dispatch, selectedCurrency]);
 
   const fetchAndCalculateConvertedAmount = async () => {
     if (selectedCurrency) {
@@ -46,10 +45,6 @@ const CurrencyRow = ({ currencyCode }: any) => {
     }
   };
 
-  useEffect(() => {
-    fetchAndCalculateConvertedAmount();
-  }, [currencyCode, selectedCurrency, inputAmount]);
-
   const handleInputAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const amount = parseFloat(e.target.value);
     setInputAmount(amount);
@@ -62,18 +57,26 @@ const CurrencyRow = ({ currencyCode }: any) => {
     setSelectedCurrency(currency);
   };
 
+  useEffect(() => {
+    fetchCurrencyOptions();
+  }, [dispatch, selectedCurrency]);
+
+  useEffect(() => {
+    fetchAndCalculateConvertedAmount();
+  }, [currencyCode, selectedCurrency, inputAmount]);
+
   return (
-    <div>
-      <div style={{ display: "flex" }}>
-        <input
+    <Box>
+      <Box style={{ display: "flex", flexDirection: "column" }}>
+        <Typography variant="h6" color="#fff">
+          Currency Information
+        </Typography>
+        <TextField
           type="number"
           value={inputAmount}
           onChange={handleInputAmountChange}
         />
-        <div>{currencyCode}</div>
-      </div>
-      <div>
-        Converted Amount:
+        <Box>{currencyCode}</Box>
         <select
           value={selectedCurrency || ""}
           onChange={handleSelectedCurrencyChange}
@@ -88,13 +91,18 @@ const CurrencyRow = ({ currencyCode }: any) => {
             <option value="">Loading...</option>
           )}
         </select>
-        {convertedAmount != null
-          ? `${inputAmount} ${currencyCode} = ${convertedAmount.toFixed(
-              2
-            )} ${selectedCurrency}`
-          : "Loading..."}
-      </div>
-    </div>
+      </Box>
+      <Box>
+        <Box color="#fff">=</Box>
+        <Typography variant="h3" color="#fff">
+          {convertedAmount != null
+            ? `${inputAmount} ${currencyCode} = ${convertedAmount.toFixed(
+                2
+              )} ${selectedCurrency}`
+            : "Loading..."}
+        </Typography>
+      </Box>
+    </Box>
   );
 };
 
